@@ -20,12 +20,22 @@ async function run() {
     const serviceCollection = client.db("turjos-pg").collection("services");
     const reviewCollection = client.db("turjos-pg").collection("reviews");
 
+    // app.get("/allservices", async (req, res) => {
+    //     console.log(req.query);
+    //     // const limit = parseInt(req.query.limit);
+    //   const query = {};
+    //   const cursor = serviceCollection.find(query);
+    //   const services = await cursor.toArray();
+    //   res.send(services);
+    // });
+    
     app.get("/services", async (req, res) => {
       const query = {};
-      const cursor = serviceCollection.find(query);
-      const services = await cursor.toArray();
+      const cursor = serviceCollection.find(query).sort({_id: -1});
+      const services = await cursor.limit(3).toArray();
       res.send(services);
     });
+    
 
     app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
@@ -47,7 +57,6 @@ async function run() {
     })
 
     app.get("/reviews" , async(req, res) => {
-        console.log(req.query);
         let query = {};
         if(req.query.service){
             query = {
