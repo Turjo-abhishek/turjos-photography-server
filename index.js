@@ -80,8 +80,7 @@ async function run() {
     app.patch("/myreviews", async(req, res) => {
       // const id = req.params.id;
       const id = req.query._id;
-      console.log(id);
-      const review= req.body.review;
+      const review = req.body.review;
       const query = {_id: ObjectId(id)};
       const updatedDoc = {
           $set: {
