@@ -20,18 +20,15 @@ async function run() {
     const serviceCollection = client.db("turjos-pg").collection("services");
     const reviewCollection = client.db("turjos-pg").collection("reviews");
 
-    // app.get("/allservices", async (req, res) => {
-    //     console.log(req.query);
-    //     // const limit = parseInt(req.query.limit);
-    //   const query = {};
-    //   const cursor = serviceCollection.find(query);
-    //   const services = await cursor.toArray();
-    //   res.send(services);
-    // });
+    app.get("/allservices", async (req, res) => {
+      const cursor = serviceCollection.find({});
+      const services = await cursor.toArray();
+      res.send(services);
+    });
     
     app.get("/services", async (req, res) => {
       const query = {};
-      const cursor = serviceCollection.find(query).sort({_id: -1});
+      const cursor = serviceCollection.find(query).sort({time: -1});
       const services = await cursor.limit(3).toArray();
       res.send(services);
     });
@@ -52,6 +49,7 @@ async function run() {
 
     app.post("/reviews", async(req, res) => {
         const review = req.body;
+        console.log(req.body);
         const result = await reviewCollection.insertOne(review);
         res.send(result);
     })
